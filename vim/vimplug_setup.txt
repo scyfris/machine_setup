@@ -1,0 +1,10 @@
+Check vimplug's readme in the vimplug dir.
+
+I've added this to the .vimrc to auto-install vimplug on new instances:
+
+
+    if empty(glob('~/.vim/autoload/plug.vim'))
+      silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+      autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+    endif
