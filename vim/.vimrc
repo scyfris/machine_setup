@@ -177,12 +177,14 @@ endif
 call plug#begin('~/.vim/plugged')
 Plug 'scrooloose/nerdtree'
 Plug 'bling/vim-airline'
-Plug 'vim-perl/vim-perl', { 'for': 'perl', 'do': 'make clean carp dancer highlight-all-pragmas noose test-more try-tiny' }
+" Plug 'vim-perl/vim-perl', { 'for': 'perl', 'do': 'make clean carp dancer highlight-all-pragmas noose test-more try-tiny' }
 Plug 'altercation/vim-colors-solarized'
 Plug 'tpope/vim-fugitive'
-Plug 'hotchpotch/perldoc-vim'
-Plug 'vim-scripts/perl-support.vim'
-"Plug 'Valloric/YouCompleteMe'
+" Plug 'hotchpotch/perldoc-vim'
+" Plug 'vim-scripts/perl-support.vim'
+Plug 'tmhedberg/SimpylFold'
+Plug 'vim-scripts/indentpython.vim'
+Plug 'Valloric/YouCompleteMe'
 call plug#end()
 
 " The following emulates tabs with buffers using airline
@@ -190,6 +192,15 @@ let g:airline#extensions#tabline#enabled = 1
 
 " Show just the filename
 let g:airline#extension#tabline#fnamemod = ':t'
+
+" Enable folding
+set foldmethod=indent
+set foldlevel=99
+
+let g:SimpylFold_docstring_preview=1
+
+" Enable folding with the spacebar
+nnoremap <space> za
 
 " To open a new empty buffer
 " This replaces :tabnew which I used to bind to this mapping
@@ -212,6 +223,23 @@ nmap <leader>bl :ls<CR>
 "" seems to use xterm which using t_Co=256.  This setting can be used, or the
 "" xterm-256color can bused from Git Bash's options->terminal screen. 
 set t_Co=256
+
+" Set PEP8 indentation on python.  See https://realpython.com/blog/python/vim-and-python-a-match-made-in-heaven/#vim-extensions
+au BufNewFile,BufRead *.py
+    \ set tabstop=4
+    \ set softtabstop=4
+    \ set shiftwidth=4
+    \ set textwidth=79
+    \ set expandtab
+    \ set autoindent
+    \ set fileformat=unix
+
+
+" Flag whitespace for us
+au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
+
+" Required for YCM
+set encoding=utf-8
 
 " Solarized colors
 "syntax enable
