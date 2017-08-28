@@ -176,6 +176,7 @@ endif
 " Plugins
 call plug#begin('~/.vim/plugged')
 Plug 'scrooloose/nerdtree'
+Plug 'scrooloose/syntastic'
 Plug 'bling/vim-airline'
 " Plug 'vim-perl/vim-perl', { 'for': 'perl', 'do': 'make clean carp dancer highlight-all-pragmas noose test-more try-tiny' }
 Plug 'altercation/vim-colors-solarized'
@@ -185,6 +186,9 @@ Plug 'tpope/vim-fugitive'
 Plug 'tmhedberg/SimpylFold'
 Plug 'vim-scripts/indentpython.vim'
 Plug 'Valloric/YouCompleteMe'
+Plug 'jistr/vim-nerdtree-tabs'
+Plug 'kien/ctrlp.vim'
+Plug 'nvie/vim-flake8'
 call plug#end()
 
 " The following emulates tabs with buffers using airline
@@ -225,15 +229,17 @@ nmap <leader>bl :ls<CR>
 set t_Co=256
 
 " Set PEP8 indentation on python.  See https://realpython.com/blog/python/vim-and-python-a-match-made-in-heaven/#vim-extensions
-au BufNewFile,BufRead *.py
-    \ set tabstop=4
-    \ set softtabstop=4
-    \ set shiftwidth=4
-    \ set textwidth=79
-    \ set expandtab
-    \ set autoindent
-    \ set fileformat=unix
+au BufNewFile,BufRead *.py 
+            \ set tabstop=4 |
+            \ set softtabstop=4 | 
+            \ set shiftwidth=4 |
+            \ set textwidth=79 |
+            \ set expandtab |
+            \ set autoindent |
+            \ set fileformat=unix
 
+
+highlight BadWhitespace ctermbg=red guibg=darkred
 
 " Flag whitespace for us
 au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
@@ -248,4 +254,22 @@ set encoding=utf-8
 "let g:solarized_termcolors=16
 "set t_Co=16
 
+let g:ycm_autoclose_preview_window_after_completion=1
+map <leader>g  :YcmCompleter GoTo<CR>
+
 colorscheme torte
+
+"python with virtualenv support
+py << EOF
+import os
+import sys
+if 'VIRTUAL_ENV' in os.environ:
+  project_base_dir = os.environ['VIRTUAL_ENV']
+  activate_this = os.path.join(project_base_dir, 'Scripts/activate_this.py')
+  execfile(activate_this, dict(__file__=activate_this))
+EOF
+
+let python_hightlight_all=1
+syntax on
+
+let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
